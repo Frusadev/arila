@@ -5,9 +5,9 @@ clone the repo: `git clone https://github.com/Frusadev/arila`
 
 `cd arila`
 
-./arila (if you are on linux)
+./arila (if you are on linux x86_64)
 
-## If you are on windows or mac, build the project:
+## If you are on windows, linux (arm) or mac, build the project:
 
 `cd arila`
 
