@@ -173,4 +173,4 @@ proc interpret(input: seq[Token]) : float =
 while true:
   write(stdout, "> ")
   let input = readLine(stdin)
-  echo interpret(lex(input))
+  if not input.isEmptyOrWhitespace(): echo interpret(lex(input))
