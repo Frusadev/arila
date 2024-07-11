@@ -1,14 +1,15 @@
 import strutils
-#import strformat
 
 type 
   TokenType = enum 
     PLUS
     MINUS
     DIVIDE
-    MULTIPLICATE 
-    NUMBER 
+    MULTIPLICATE
+    NUMBER
     UNKNOWN_TOKEN
+    RPAREN
+    LPAREN
 
 type 
   Token = ref object
@@ -37,6 +38,10 @@ proc matchOperator(input: string) : Token =
     outputToken.tokType = DIVIDE
   of "*":
     outputToken.tokType = MULTIPLICATE
+  of "(":
+    outputToken.tokType = LPAREN
+  of ")":
+    outputToken.tokType = RPAREN
   else:
     outputToken.tokTYpe = UNKNOWN_TOKEN
   return outputToken
@@ -87,7 +92,7 @@ proc calculate(leftNumberToken: Token, operatorToken: Token, rightNumberToken: T
     left: float = parseFloat(leftNumberToken.value)
     right: float = parseFloat(rightNumberToken.value)
 
-  case operatorToken.tokType 
+  case operatorToken.tokType
   of PLUS:
     result = left + right
   of MULTIPLICATE:
@@ -106,7 +111,7 @@ proc calculate(left: float, operatorToken: Token, rightNumberToken: Token) : flo
   let 
     right: float = parseFloat(rightNumberToken.value)
 
-  case operatorToken.tokType 
+  case operatorToken.tokType
   of PLUS:
     result = left + right
   of MULTIPLICATE:
@@ -120,7 +125,7 @@ proc calculate(left: float, operatorToken: Token, rightNumberToken: Token) : flo
 
 proc interpret(input: seq[Token]) : float =
   var 
-    size: int = len input 
+    size: int = len input
 
   var
     operator: Token
@@ -129,7 +134,9 @@ proc interpret(input: seq[Token]) : float =
     previousResult: float
     current: Token
     factorsOutput: seq[Token]
+
   # For factors : factor (mul | div) factor
+
   while position <= size - 1:
     current = input[position]
     if current.tokType == NUMBER:
@@ -165,12 +172,12 @@ proc interpret(input: seq[Token]) : float =
         previousNumberToken = current
         previousResult = parseFloat(current.value)
       else:
-        previousResult = calculate(previousResult, operator, current)
+       previousResult = calculate(previousResult, operator, current)
     else: operator = current
     inc position
   return previousResult
 
 while true:
-  write(stdout, "> ")
+  write(stdout, ">= ")
   let input = readLine(stdin)
   if not input.isEmptyOrWhitespace(): echo interpret(lex(input))
